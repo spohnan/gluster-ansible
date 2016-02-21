@@ -1,0 +1,7 @@
+# IDE files
+*.iml
+.idea/
+
+# Only check in default variable config files
+vars/*
+!vars/defaults.yml
