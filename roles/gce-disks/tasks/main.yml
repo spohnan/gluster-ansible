@@ -1,0 +1,14 @@
+- name: Create disk(s)
+  gce_pd:
+    name: "{{ item[0] }}-{{ item[1] }}"
+    instance_name: "{{ item[0] }}"
+    mode: "{{ gce_pd_mode }}"
+    size_gb: "{{ storage_servers_disk_size_gb }}"
+    disk_type: "{{ gce_pd_disk_type }}"
+    zone: "{{ gce_zone }}"
+    service_account_email: "{{ gce_service_account_email }}"
+    pem_file: "{{ gce_pem_file }}"
+    project_id: "{{ gce_project_id }}"
+  with_nested:
+      - "{{ server_names.strip().split(',') }}"
+      - "{{ disk_names.strip().split(',') }}"

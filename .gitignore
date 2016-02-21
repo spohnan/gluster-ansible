@@ -5,3 +5,9 @@
 # Only check in default variable config files
 vars/*
 !vars/defaults.yml
+
+# Build artifacts
+docs/target/
+
+# Other random cruft
+.DS_Store

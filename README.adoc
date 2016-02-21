@@ -1,0 +1,53 @@
+## Mesos Ansible
+
+Create a Mesos cluster with volume storage provided by a cluster of Gluster storage nodes on either AWS or Google Services
+
+AWS Notes:
+
+* Create an API key or run from a server with the appropriate instance role
+
+	# Configure key or run from instance with role
+	export AWS_ACCESS_KEY_ID=FOO
+	export AWS_SECRET_ACCESS_KEY=BAR
+	export AWS_REGION=us-east-1
+	
+* Rename hosts/aws/ec2.ini.example to hosts/aws/ec2.ini You probably want to set the region and turn off query of RDS etc.
+
+
+Google Compute Engine Notes:
+
+* Create a project in the the Google Developers Console
+* Create a service account and key through the Google Developers Console API section
+* Add an ssh key to the project
+* Rename hosts/gce/gce.ini.example to hosts/gce/gce.ini and fill in the values with your account information
+
+Usage:
+
+	# Run the inventory listing for the specified provider
+	./mesos.sh --prefix m1 --provider gce --action list-inventory
+
+	# Run a specific playbook (omit the provider prefix in the name)
+	./mesos.sh --prefix m1 --provider gce --vars asdc.yml --action provision-storage
+
+	# Run one of the multi-step actions
+	./mesos.sh --prefix m1 --provider gce --vars asdc.yml --action build-all
+	
+	# You can add --verbose as an argument to ./mesos.sh to get Ansible verbose output
+
+Post Install Tasks
+
+* The servers will get created, volumes created, formatted and mounted
+* Follow up with creating the pool and volumes as described starting in Step 4
+  * http://gluster.readthedocs.org/en/latest/Quick-Start-Guide/Quickstart/
+  
+Example:
+
+	# Peer the first two servers (execute from each server)
+	gluster peer probe m1-store-416f76b3
+	gluster peer probe m1-store-7e613611
+	
+	# From any server
+	gluster volume create gv0 replica 2 m1-store-416f76b3:/data/sdb/gv0 m1-store-7e613611:/data/sdb/gv0
+    gluster volume start gv0
+    mount -t glusterfs m1-store-416f76b3:gv0 /mnt/storage
+    

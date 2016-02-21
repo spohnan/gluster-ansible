@@ -1,0 +1,20 @@
+sudo: required
+language: java
+env:
+  global:
+  - GH_REF: github.com/spohnan/gluster-ansible.git
+  - secure: "iJ6T1nR98usX9fDBi82bNjtc7JYfMwJx8EjX7JCxGaPnXDVcXqYT3ykSc+92y+coIKOvRe6MJT4u6ZKGuGfkBRabpcKjmb1rN6m+FxKNSh2h04Nn6gfuIQOXHuSB2q8TH2VrSGK9iFUyvRZ1j33hr6J00kKKwhBEs3uhCklJtFOd0phZNGu7xdsrRVHjVnEJlY1mgPLlW9UydGZB0CJ+DwwGAspx+MG5r29ZG++QnJRVzij8ypKBYaYl5lg446BLomN00BO8pMFZgNF33btEFPuiLJFyLnzwxMbds0FQYnkLmiE3epykl1TtcKJBkXzsh78up9aOMf+yKUoXhxBQ5i8+N8NsDvc1BwtAj777Wg6oZRfia7J2E6n8oRaQ6JNzIEa01Pv1PhJh7jK7ooU6Ju5iVfk3GHGs6zWO61oK8Yu0CDC6dCIxDy5u6UQfMG0+TjCLF1t/+1SlZ1JlA8V4PrDm5HR4apa8v+NZn8WR6XUbB3jlAEdvmSXPKKAH9KpeczPY5IyjwqPViKRCa/4Ors7pbU+WKZvacoBpmTXhYIfWJPL+3+mS41uskOZzgxzFYWGHmvUbxXEuDkL3lfiyegoeXMZqg+/ZC/4i7p7MU7e1ycb1Se1g4125+edSi1lmk1OXP/9WgSPGIwX6WMsBuWwSoxppjkqTO1KY+wTftUM="
+branches:
+  only:
+    - master
+cache:
+  directories:
+    - $HOME/.m2
+services:
+  - docker
+install: true
+script:
+  - docker pull spohnan/build-jdk8
+  - docker run -v $(pwd):/tmp/docs/ spohnan/build-jdk8 sh -c "cd /tmp/docs/; ./docs/build-gh-pages.sh; chown -R $(id -u):$(id -u) docs/target/"
+after_success:
+  - ./docs/deploy-gh-pages.sh

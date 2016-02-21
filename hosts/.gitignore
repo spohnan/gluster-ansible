@@ -1,0 +1,2 @@
+# Don't check in locally modified ini files
+*.ini

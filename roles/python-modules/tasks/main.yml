@@ -1,0 +1,10 @@
+---
+
+- name: Install apache-libcloud
+  pip: name=apache-libcloud state=latest
+
+- name: Install boto for use with ec2
+  pip: name=boto state=latest
+
+- name: Install six
+  pip: name=six state=latest

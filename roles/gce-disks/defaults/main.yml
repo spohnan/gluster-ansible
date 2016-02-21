@@ -1,0 +1,14 @@
+role: storage
+gce_pd_mode: READ_WRITE
+gce_pd_name: disk
+gce_pd_disk_type: pd-standard
+server_names: |
+                {% set comma = joiner(",") %}
+                {% for s in range(0, storage_servers_count) -%}
+                  {{comma()}}{{ cluster_prefix }}-{{ role }}-{{ s | to_uuid | truncate(6, false, '')}}
+                {%- endfor %}
+disk_names: |
+                {% set comma = joiner(",") %}
+                {% for d in range(0, storage_servers_disks) -%}
+                  {{comma()}}disk{{ d }}
+                {%- endfor %}

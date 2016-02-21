@@ -1,0 +1,55 @@
+- hosts: "tag_Cluster_{{ cluster_prefix }}:&tag_Type_storage"
+  vars_files:
+    - vars/defaults.yml
+    - "vars/{{ varfile }}"
+  become: true
+
+  tasks:
+
+  - name: Run hostnamectl command
+    hostname:
+      name: "{{ ec2_tag_Cluster }}-{{ ec2_tag_Type }}-{{ ec2_id | to_uuid | truncate(6, false, '') }}.{{ domain }}"
+
+  - name: Ensure hostname is preserved in cloud-init
+    lineinfile: "dest=/etc/cloud/cloud.cfg regexp='^preserve_hostname' line='preserve_hostname: true' state=present"
+
+  - name: Update /etc/hosts file
+    lineinfile: dest=/etc/hosts regexp='.*{{ hostvars[item].ansible_hostname }}$' line='{{ hostvars[item].ansible_default_ipv4.address }} {{ hostvars[item].ansible_fqdn }} {{ hostvars[item].ansible_hostname }}' state=present
+    when: hostvars[item].ansible_default_ipv4.address is defined
+    with_items: '{{groups.all}}'
+
+  - name: Turn off selinux
+    selinux: state=disabled
+
+  - name: Turn off ipv6
+    sysctl: name=net.ipv6.conf.all.disable_ipv6 value=1 state=present
+
+  - name: Turn off ipv6
+    sysctl: name=net.ipv6.conf.default.disable_ipv6 value=1 state=present
+
+  - name: Turn down vm.swappiness setting
+    sysctl: name=vm.swappiness value=5 state=present
+
+  - name: Remove require tty
+    lineinfile: regexp="requiretty" dest=/etc/sudoers state=absent
+
+  - name: Add EPEL repo
+    yum: name=https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm state=present
+
+  - name: Add Gluster EPEL repository
+    get_url: url="https://download.gluster.org/pub/gluster/glusterfs/{{ gluster_version }}/LATEST/EPEL.repo/glusterfs-epel.repo" dest=/etc/yum.repos.d/glusterfs-epel.repo mode=0644
+
+  - name: Install GlusterFS
+    yum: "name={{ item }} state=installed"
+    with_items:
+      - glusterfs-server
+      - glusterfs-client
+
+  - name: Ensure Glusterd is started and will start at boot
+    service: name=glusterd enabled=yes state=started
+
+  - name: Install our volume setup script
+    copy: src=files/prepare-volumes.sh dest=/root/prepare-volumes.sh mode=0755
+
+  - name: Execute our volume setup script
+    command: /root/prepare-volumes.sh creates=/bricks

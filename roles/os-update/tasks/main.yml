@@ -1,0 +1,4 @@
+- name: Upgrade all packages in RedHat-based machines
+  when: ansible_os_family == "RedHat"
+  become: yes
+  yum: name=* state=latest
