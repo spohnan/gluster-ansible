@@ -14,6 +14,7 @@ services:
   - docker
 install: true
 script:
+  - docker pull spohnan/build-jdk8
   - docker run -v $HOME/.m2:$HOME/.m2 -v $(pwd):/tmp/docs/ spohnan/build-jdk8 sh -c "cd /tmp/docs/; ./docs/build-gh-pages.sh; chown -R $(id -u):$(id -u) docs/target/"
 after_success:
   - ./docs/deploy-gh-pages.sh
