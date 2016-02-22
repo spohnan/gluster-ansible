@@ -1,4 +1,4 @@
-- hosts: "tag_type-mesos:&tag_cluster-{{ cluster_prefix }}"
+- hosts: "tag_type-storage:&tag_cluster-{{ cluster_prefix }}"
   become: true
   vars_files:
     - vars/defaults.yml

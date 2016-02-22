@@ -13,7 +13,7 @@
     - vars/defaults.yml
     - "vars/{{ varfile }}"
   roles:
-    - { role: gce-instances, gce_tags: [ "type-mesos", "cluster-{{ cluster_prefix }}", "role-{{ role }}" ] }
+    - { role: gce-instances, gce_tags: [ "type-storage", "cluster-{{ cluster_prefix }}", "role-{{ role }}" ] }
 
 - name: Create storage volumes
   hosts: localhost
