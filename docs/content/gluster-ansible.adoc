@@ -1,1 +1,76 @@
-## gluster-ansible
+= Gluster Install Using Ansible
+v${project.version}
+
+////
+PDF Generation gives an error if you try to use icons
+////
+ifdef::backend-html5[]
+== Links
+
+=== icon:home[] https://spohnan.github.io/gluster-ansible/[Site]
+
+=== icon:github[] https://github.com/spohnan/gluster-ansible[GitHub]
+
+endif::backend-html5[]
+
+== Overview
+
+This project contains a top level control script and a number of Ansible playbooks to provision and configure a cluster
+of GlusterFS storage nodes. Configuration has been provided to be able to deploy to either AWS or Google Compute Engine
+environments.
+
+== Environment Setup
+
+Each environment requires a some account creation and project configuration to work with your credentials
+
+=== Amazon Web Services
+
+* Create an API key or run from a server with the appropriate instance role
+
+[source, bash]
+----
+# Configure key or run from instance with role
+export AWS_ACCESS_KEY_ID=FOO
+export AWS_SECRET_ACCESS_KEY=BAR
+export AWS_REGION=us-east-1
+----
+
+* Download a copy of the https://raw.githubusercontent.com/ansible/ansible/devel/contrib/inventory/ec2.ini[ec2.ini] configuration
+  file and save it to hosts/aws/ec2.ini
+
+=== Google Compute Engine
+
+* Create a project in the the Google Developers Console
+* Create a service account and key through the Google Developers Console API section
+* Add an ssh key to the project
+* Rename hosts/gce/gce.ini.example to hosts/gce/gce.ini and fill in the values with your account information
+
+== gluster.sh script
+
+This script collects the arguments needed to perform any action against a provider and coordinates the execution of the
+Ansible playbooks. Both multi-step actions that will configure everything in a single commmand and the ability to run or
+re-run individual playbooks are allowed.
+
+The --vars argument is used to specify a local configuration override file you create in the vars/ directory with the
+settings you wish to override for your cluster configuration.
+
+=== Usage Examples
+
+[source, bash]
+----
+# Run the multi-step action
+./gluster.sh --prefix dev --provider gce --vars asdc.yml --action build-all
+
+# Run the inventory listing for the specified provider
+./gluster.sh --prefix dev --provider gce --action list-inventory
+
+# Run a specific playbook (omit the provider prefix in the name)
+./gluster.sh --prefix dev --provider gce --vars asdc.yml --action provision-storage
+
+# You can add the --verbose to get extra output from Ansible to assist debugging issues
+./gluster.sh --prefix dev --provider gce --vars asdc.yml --action configure --verbose
+----
+
+== Version
+
+This documentation was generated for gluster-ansible version ${project.version} from commit ${buildNumber}.

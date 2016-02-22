@@ -7,7 +7,7 @@
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap-theme.min.css">
-    <style type='text/css'></style>
+    <style type='text/css'>.glyphicon-plus { font-size: 50px; }</style>
 </head>
 <body>
 
@@ -39,27 +39,39 @@
 <!-- Start Main Content Area -->
 <div class="container marketing">
     <div class="row">
+        <div class="col-lg-12 text-center">
+            <a href="https://www.gluster.org/" target="_blank"><img src="images/gluster.png"/></a>
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            <a href="https://www.ansible.com/" target="_blank"><img src="images/ansible.png"/></a>
+            <br /><br />
+            <a href="gluster-ansible.html" class="btn btn-success btn-lg" role="button">Learn More</a>
+            <hr class="featurette-divider" />
+         </div>
+    </div>
+    <div class="row">
         <div class="col-lg-4">
             <h2>What is this?</h2>
-            <p></p>
+            <p>A set of scripts to provision and configure a Gluster storage cluster</p>
         </div>
         <div class="col-lg-4">
-            <h2>Intent</h2>
+            <h2>Why use this?</h2>
             <ul style="text-align: left">
-                <li></li>
+                <li>Provisions and configures your storage cluster. Just configure and activate your volume(s) afterwards</li>
+                <li>Can utilize multiple infrastructure providers</li>
             </ul>
         </div>
         <div class="col-lg-4">
             <h2>Features</h2>
             <ul style="text-align: left">
-                <li></li>
+                <li>Single control script interface</li>
+                <li>Can run all or individual steps</li>
             </ul>
         </div>
     </div>
 
-    <hr class="featurette-divider">
+    <hr class="featurette-divider" />
     <footer>
-        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p class="pull-right"></p>
     </footer>
 
 </div>
