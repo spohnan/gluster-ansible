@@ -65,7 +65,7 @@ settings you wish to override for your cluster configuration.
 ./gluster.sh --prefix dev --provider gce --action list-inventory
 
 # Run a specific playbook (omit the provider prefix in the name)
-./gluster.sh --prefix dev --provider gce --vars asdc.yml --action provision-storage
+./gluster.sh --prefix dev --provider gce --vars asdc.yml --action provision
 
 # You can add the --verbose to get extra output from Ansible to assist debugging issues
 ./gluster.sh --prefix dev --provider gce --vars asdc.yml --action configure --verbose
