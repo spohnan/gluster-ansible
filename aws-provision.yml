@@ -1,4 +1,5 @@
-- name: Provision storage nodes
+- name: Create storage nodes and volumes
+  any_errors_fatal: true
   hosts: localhost
   connection: local
   gather_facts: no
@@ -7,7 +8,22 @@
     - "vars/{{ varfile }}"
   vars:
     - ec2_tag_Type: "storage"
+    - server_count: "{{ storage_servers_count }}"
   roles:
     - python-modules
     - aws-instances
     - aws-disks
+
+- name: Create standalone storage clients
+  any_errors_fatal: true
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    - vars/defaults.yml
+    - "vars/{{ varfile }}"
+  vars:
+    - ec2_tag_Type: "storage-client"
+    - server_count: "{{ client_servers_count }}"
+  roles:
+    - aws-instances

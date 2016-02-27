@@ -1,6 +1,6 @@
 - name: Provision EC2 Instance(s)
   ec2:
-    exact_count: "{{ storage_servers_count }}"
+    exact_count: "{{ server_count }}"
     count_tag:
       Cluster: "{{ ec2_tag_Cluster }}"
       Type: "{{ ec2_tag_Type }}"
@@ -30,7 +30,7 @@
     aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
     tags:
       Name: "{{ ec2_tag_Cluster }}-{{ ec2_tag_Type }}-{{ item.id | to_uuid | truncate(6, false, '') }}"
-  with_items: ec2.instances
+  with_items: "{{ ec2.instances }}"
 
 - name: Wait for SSH
   wait_for:
@@ -39,4 +39,4 @@
     delay: 10
     timeout: 320
     state: started
-  with_items: ec2.instances
+  with_items: "{{ ec2.instances}}"

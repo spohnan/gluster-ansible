@@ -4,4 +4,4 @@
     volume_type: "{{ storage_servers_disk_type }}"
     volume_size: "{{ storage_servers_disk_size_gb }}"
     # delete_on_termination: true # TODO: Added in Ansible 2.1
-  with_items: ec2.instances
+  with_items: "{{ ec2.instances }}"

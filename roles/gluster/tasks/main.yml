@@ -27,10 +27,10 @@
   when: type == "storage"
   service: name=glusterd enabled=yes state=started
 
-- name: Install our volume setup script
+- name: Install the volume setup script
   when: type == "storage"
   copy: src=files/prepare-volumes.sh dest=/root/prepare-volumes.sh mode=0755
 
-- name: Execute our volume setup script
+- name: Execute the volume setup script
   when: type == "storage"
   command: /root/prepare-volumes.sh creates=/bricks
