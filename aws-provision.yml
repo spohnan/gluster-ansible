@@ -1,10 +1,3 @@
-- name: Update local Python modules if needed
-  hosts: localhost
-  connection: local
-  gather_facts: no
-  roles:
-    - python-modules
-
 - name: Provision storage nodes
   hosts: localhost
   connection: local
@@ -15,5 +8,6 @@
   vars:
     - ec2_tag_Type: "storage"
   roles:
+    - python-modules
     - aws-instances
     - aws-disks

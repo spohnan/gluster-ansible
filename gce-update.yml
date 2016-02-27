@@ -1,11 +1,6 @@
 - hosts: "tag_type-storage:&tag_cluster-{{ cluster_prefix }}"
-  become: true
-
   vars_files:
     - vars/defaults.yml
     - "vars/{{ varfile }}"
-
-  tasks:
-    - name: Upgrade all packages in RedHat-based machines
-      when: ansible_os_family == "RedHat"
-      yum: name=* state=latest
+  roles:
+    - os-update

@@ -1,26 +1,11 @@
-- name: Update local Python modules if needed
+- name: Create storage nodes and volumes
   hosts: localhost
   connection: local
   gather_facts: no
+  vars_files:
+    - vars/defaults.yml
+    - "vars/{{ varfile }}"
   roles:
     - python-modules
-
-- name: Create storage nodes
-  hosts: localhost
-  connection: local
-  gather_facts: no
-  vars_files:
-    - vars/defaults.yml
-    - "vars/{{ varfile }}"
-  roles:
     - { role: gce-instances, gce_tags: [ "type-storage", "cluster-{{ cluster_prefix }}", "role-{{ role }}" ] }
-
-- name: Create storage volumes
-  hosts: localhost
-  connection: local
-  gather_facts: no
-  vars_files:
-    - vars/defaults.yml
-    - "vars/{{ varfile }}"
-  roles:
     - gce-disks

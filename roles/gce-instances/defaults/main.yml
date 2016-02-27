@@ -1,7 +1,9 @@
 role: storage
 gce_tags: [ ]
+# To support idempotent playbook calls with GCE where server names are immutable the default server names
+# are generated from cluster prefix and cluster count index
 server_names: |
                 {% set comma = joiner(",") %}
                 {% for s in range(0, storage_servers_count) -%}
-                  {{comma()}}{{ cluster_prefix }}-{{ role }}-{{ s | to_uuid | truncate(6, false, '')}}
+                  {{comma()}}{{ cluster_prefix }}-{{ role }}-{{ [s|string, cluster_prefix] | join('') | hash('sha1')|string | truncate(6, false, '')}}
                 {%- endfor %}
