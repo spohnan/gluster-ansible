@@ -1,0 +1,17 @@
+#
+# Storage volume default settings
+#
+# Reference info for settings and pricing
+#
+# http://docs.ansible.com/ansible/ec2_vol_module.html
+# https://aws.amazon.com/ebs/pricing/
+#
+
+# The number of disks, which will become GlusterFS "bricks"
+storage_servers_disks: 1
+
+# The size of each disk
+storage_servers_disk_size_gb: 10
+
+# The disk type
+ec2_storage_servers_disk_type: gp2

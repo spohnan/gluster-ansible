@@ -1,7 +1,25 @@
-role: storage
+#
+# Storage volume default settings
+#
+# Reference info for settings and pricing
+#
+# http://docs.ansible.com/ansible/gce_pd_module.html
+# https://cloud.google.com/compute/pricing#disk
+#
+
+# The number of disks, which will become GlusterFS "bricks"
+storage_servers_disks: 1
+
+# The size of each disk
+storage_servers_disk_size_gb: 10
+
+# GCE Disks have a mode settings to enable read only volumes
 gce_pd_mode: READ_WRITE
-gce_pd_name: disk
+
+# The disk type
 gce_pd_disk_type: pd-standard
+
+# Default names will be disk1 through diskN
 disk_names: |
                 {% set comma = joiner(",") %}
                 {% for d in range(1, storage_servers_disks + 1) -%}

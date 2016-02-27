@@ -1,3 +1,29 @@
+#
+# Storage instance default settings
+#
+# Reference info for settings and pricing
+#
+# http://docs.ansible.com/ansible/ec2_module.html
+# https://aws.amazon.com/ec2/pricing/
+# https://aws.amazon.com/ebs/pricing/
+
+# The number of storage servers in your cluster
+storage_servers_count: 2
+
+# The size of each storage server
+ec2_storage_server_instance_type: m4.large
+
+# The root volume of each storage server
+ec2_root_volume_size: 10
 ec2_root_volume_type: gp2
+
+# If you'd like a dedicated client with tools loaded (for tasks like benchmarking the cluster)
 client_servers_count: 0
-server_count: 2
+
+# The size of each client server
+ec2_client_instance_type: m4.large
+
+# Location, network and OS image settings for all
+ec2_image: ami-6d1c2007
+ec2_region: us-east-1
+assign_public_ip: yes

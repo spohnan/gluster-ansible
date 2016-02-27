@@ -1,5 +1,30 @@
-type: storage
-gce_tags: [ ]
+#
+# Storage instance default settings
+#
+# Reference info for settings and pricing
+#
+# http://docs.ansible.com/ansible/gce_module.html
+# https://cloud.google.com/compute/pricing
+#
+
+# The number of storage servers in your cluster
+storage_servers_count: 2
+
+# The size of each storage server
+gce_storage_server_machine_type: n1-standard-2
+
+# If you'd like a dedicated client with tools loaded (for tasks like benchmarking the cluster)
+client_servers_count: 0
+
+# The size of each client server
+gce_client_server_machine_type: n1-standard-1
+
+# Location and OS image settings for all
+
+# Find available instances with the command: gcloud compute images list
+gce_image: centos-7-v20160126
+gce_zone: us-central1-b
+
 # To support idempotent playbook calls with GCE where server names are immutable the default server names
 # are generated from cluster prefix, server type label and cluster count index which is hashed to give a unique-ish suffix
 server_names: |

@@ -9,6 +9,7 @@
   vars:
     - type: "storage"
     - server_count: "{{ storage_servers_count }}"
+    - gce_machine_type: "{{ gce_storage_server_machine_type }}"
   roles:
     - python-modules
     - { role: gce-instances, gce_tags: [ "type-{{ type }}", "cluster-{{ cluster_prefix }}" ] }
@@ -25,5 +26,6 @@
   vars:
     - type: "storage-client"
     - server_count: "{{ client_servers_count }}"
+    - gce_machine_type: "{{ gce_client_server_machine_type }}"
   roles:
     - { role: gce-instances, gce_tags: [ "type-{{ type }}", "cluster-{{ cluster_prefix }}" ] }

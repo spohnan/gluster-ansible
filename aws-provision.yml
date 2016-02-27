@@ -8,6 +8,7 @@
     - "vars/{{ varfile }}"
   vars:
     - ec2_tag_Type: "storage"
+    - ec2_instance_type: "{{ ec2_storage_server_instance_type}}"
     - server_count: "{{ storage_servers_count }}"
   roles:
     - python-modules
@@ -24,6 +25,7 @@
     - "vars/{{ varfile }}"
   vars:
     - ec2_tag_Type: "storage-client"
+    - ec2_instance_type: "{{ ec2_client_instance_type}}"
     - server_count: "{{ client_servers_count }}"
   roles:
     - aws-instances
