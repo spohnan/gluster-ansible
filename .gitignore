@@ -11,3 +11,4 @@ docs/target/
 
 # Other random cruft
 .DS_Store
+*.retry
