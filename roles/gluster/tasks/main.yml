@@ -1,0 +1,36 @@
+# System configuration to support either the client or the server installations
+# I'm purposefully leaving selinux and ipv6 enabled as I've seen no issue with either thus far
+- name: Turn down vm.swappiness setting
+  sysctl: name=vm.swappiness value=5 state=present
+
+- name: Add EPEL repo
+  when: ansible_os_family == "RedHat"
+  yum: name="https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm" state=present
+
+- name: Add Gluster EPEL repository
+  when: ansible_os_family == "RedHat"
+  get_url: url="https://download.gluster.org/pub/gluster/glusterfs/{{ gluster_version }}/LATEST/EPEL.repo/glusterfs-epel.repo" dest=/etc/yum.repos.d/glusterfs-epel.repo mode=0644
+
+- name: Install GlusterFS client components
+  yum: "name={{ item }} state=installed"
+  with_items:
+    - glusterfs-fuse
+
+# Server install
+- name: Install GlusterFS server components
+  when: type == "storage"
+  yum: "name={{ item }} state=installed"
+  with_items:
+    - glusterfs-server
+
+- name: Ensure Glusterd is started and will start at boot
+  when: type == "storage"
+  service: name=glusterd enabled=yes state=started
+
+- name: Install our volume setup script
+  when: type == "storage"
+  copy: src=files/prepare-volumes.sh dest=/root/prepare-volumes.sh mode=0755
+
+- name: Execute our volume setup script
+  when: type == "storage"
+  command: /root/prepare-volumes.sh creates=/bricks

@@ -1,4 +1,4 @@
-- hosts: "tag_type-storage:&tag_cluster-{{ cluster_prefix }}"
+- hosts: "tag_type-storage:tag_type-storage-client:&tag_cluster-{{ cluster_prefix }}"
   vars_files:
     - vars/defaults.yml
     - "vars/{{ varfile }}"
