@@ -1,1 +1,4 @@
-gluster_version: 3.7
+# Override common default settings here
+# Instance specific settings you should create another file in this directory
+# for each environment i.e. dev.yml and then pass the name to the gluster.sh script
+# using the --vars argument as described in the documentation and examples

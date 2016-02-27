@@ -1,2 +1,1 @@
-type: storage
-client_servers_count: 0
+gluster_version: 3.7
