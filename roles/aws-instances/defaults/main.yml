@@ -24,6 +24,6 @@ client_servers_count: 0
 ec2_client_instance_type: m4.large
 
 # Location, network and OS image settings for all
-ec2_image: ami-6d1c2007
+ec2_image: ami-6d1c2007 # CentOS Linux 7 x86_64 HVM EBS
 ec2_region: us-east-1
 assign_public_ip: yes
