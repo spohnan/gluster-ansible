@@ -21,7 +21,7 @@ while [ $# -gt 0 ]; do
 done
 
 # Ensure we've specified the cluster name prefix
-if [ -z "${ARGS[prefix]}" ]; then
+if [ -z "${ARGS[prefix]}" ] && [ "${ARGS[action]}" != "list-inventory" ]; then
 	echo "No cluster name given ... exiting"
 	exit
 fi

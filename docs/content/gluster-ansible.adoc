@@ -81,11 +81,11 @@ settings you wish to override for your cluster configuration.
 
 [source, bash]
 ----
-# Run the multi-step action
-./gluster.sh --prefix dev --provider gce --vars mydomain.yml --action build-all
-
 # Run the inventory listing for the specified provider
-./gluster.sh --prefix dev --provider gce --action list-inventory
+./gluster.sh --provider gce --action list-inventory
+
+# Run a multi-step action
+./gluster.sh --prefix dev --provider gce --vars mydomain.yml --action build-all
 
 # Run a specific playbook (omit the provider prefix in the name)
 ./gluster.sh --prefix dev --provider gce --vars mydomain.yml --action provision
