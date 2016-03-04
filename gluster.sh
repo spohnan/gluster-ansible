@@ -3,15 +3,15 @@
 # Usage: gluster.sh
 # 			--provider [aws|gce]
 # 			--prefix [NODE_NAME_PREFIX]
-# 			--action [CONFIG_STEP]
 # 			--vars [variable file name]
+# 			--action [CONFIG_STEP]
 #			--verbose                      # optionally run ansible with -vvv
 
 # Parse arguments
 declare -A ARGS
 # defaults
 ARGS[reboot]="true"
-ARGS[provider]="gce"
+ARGS[provider]="aws"
 while [ $# -gt 0 ]; do
     # Trim the first two chars off of the arg name ex: --foo
     case "$1" in
