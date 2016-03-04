@@ -13,6 +13,7 @@
     instance_tags:
       Cluster: "{{ ec2_tag_Cluster }}"
       Type: "{{ ec2_tag_Type }}"
+      billing: "{{ ec2_tag_Billing }}"
     assign_public_ip: "{{ assign_public_ip }}"
     wait: true
     volumes:
