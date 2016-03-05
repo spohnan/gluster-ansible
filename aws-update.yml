@@ -1,10 +1,9 @@
-- hosts: "tag_Type_storage:tag_Type_storage_client:&tag_Cluster_{{ cluster_prefix }}"
+#
+# Update all Gluster cluster nodes
+#
+- name: Update all Gluster cluster nodes
+  hosts: "tag_Type_storage:tag_Type_storage_client:&tag_Cluster_{{ cluster_prefix }}"
   vars_files:
-    - vars/defaults.yml
     - "vars/{{ varfile }}"
-  become: true
-
-  tasks:
-    - name: Upgrade all packages in RedHat-based machines
-      when: ansible_os_family == "RedHat"
-      yum: name=* state=latest
+  roles:
+    - os-update

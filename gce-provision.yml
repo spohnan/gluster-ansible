@@ -1,10 +1,12 @@
+#
+# Create storage nodes and volumes
+#
 - name: Create storage nodes and volumes
   any_errors_fatal: true
   hosts: localhost
   connection: local
   gather_facts: no
   vars_files:
-    - vars/defaults.yml
     - "vars/{{ varfile }}"
   vars:
     - type: "storage"
@@ -15,13 +17,15 @@
     - { role: gce-instances, gce_tags: [ "type-{{ type }}", "cluster-{{ cluster_prefix }}" ] }
     - gce-disks
 
+#
+# Create standalone storage clients
+#
 - name: Create standalone storage clients
   any_errors_fatal: true
   hosts: localhost
   connection: local
   gather_facts: no
   vars_files:
-    - vars/defaults.yml
     - "vars/{{ varfile }}"
   vars:
     - type: "storage-client"

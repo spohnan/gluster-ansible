@@ -1,33 +1,42 @@
-- hosts: "tag_Cluster_{{ cluster_prefix }}"
+#
+# Configuration for all nodes
+#
+- name: Configuration for all nodes
+  hosts: "tag_Cluster_{{ cluster_prefix }}"
   vars_files:
-    - vars/defaults.yml
     - "vars/{{ varfile }}"
   become: true
   tasks:
 
-  - name: Run hostnamectl command
-    hostname:
-      name: "{{ ec2_tag_Cluster }}-{{ ec2_tag_Type }}-{{ ec2_id | hash('sha1') | truncate(6, false, '') }}.{{ domain }}"
+    - name: Run hostnamectl command
+      hostname:
+        name: "{{ ec2_tag_Cluster }}-{{ ec2_tag_Type }}-{{ ec2_id | hash('sha1') | truncate(6, false, '') }}.{{ domain }}"
 
-  - name: Ensure hostname is preserved in cloud-init
-    lineinfile: "dest=/etc/cloud/cloud.cfg regexp='^preserve_hostname' line='preserve_hostname: true' state=present"
+    - name: Ensure hostname is preserved in cloud-init
+      lineinfile: "dest=/etc/cloud/cloud.cfg regexp='^preserve_hostname' line='preserve_hostname: true' state=present"
 
-  - name: Update /etc/hosts file
-    lineinfile: dest=/etc/hosts regexp='.*{{ hostvars[item].ansible_hostname }}$' line='{{ hostvars[item].ansible_default_ipv4.address }} {{ hostvars[item].ansible_fqdn }} {{ hostvars[item].ansible_hostname }}' state=present
-    when: hostvars[item].ansible_default_ipv4.address is defined
-    with_items: "{{ play_hosts }}"
+    - name: Update /etc/hosts file
+      lineinfile: dest=/etc/hosts regexp='.*{{ hostvars[item].ansible_hostname }}$' line='{{ hostvars[item].ansible_default_ipv4.address }} {{ hostvars[item].ansible_fqdn }} {{ hostvars[item].ansible_hostname }}' state=present
+      when: hostvars[item].ansible_default_ipv4.address is defined
+      with_items: "{{ play_hosts }}"
 
-- hosts: "tag_Cluster_{{ cluster_prefix }}:&tag_Type_storage"
+#
+# Configure Gluster storage nodes
+#
+- name: Configure Gluster storage nodes
+  hosts: "tag_Cluster_{{ cluster_prefix }}:&tag_Type_storage"
   vars_files:
-    - vars/defaults.yml
     - "vars/{{ varfile }}"
   become: true
   roles:
     - { role: gluster, type: 'storage' }
 
-- hosts: "tag_Cluster_{{ cluster_prefix }}:&tag_Type_storage_client"
+#
+# Configure Gluster client nodes
+#
+- name: Configure Gluster client nodes
+  hosts: "tag_Cluster_{{ cluster_prefix }}:&tag_Type_storage_client"
   vars_files:
-    - vars/defaults.yml
     - "vars/{{ varfile }}"
   become: true
   roles:

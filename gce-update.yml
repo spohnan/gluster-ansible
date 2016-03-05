@@ -1,6 +1,9 @@
-- hosts: "tag_type-storage:tag_type-storage-client:&tag_cluster-{{ cluster_prefix }}"
+#
+# Update all Gluster cluster nodes
+#
+- name: Update all Gluster cluster nodes
+  hosts: "tag_type-storage:tag_type-storage-client:&tag_cluster-{{ cluster_prefix }}"
   vars_files:
-    - vars/defaults.yml
     - "vars/{{ varfile }}"
   roles:
     - os-update

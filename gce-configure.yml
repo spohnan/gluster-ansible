@@ -1,15 +1,21 @@
-- hosts: "tag_type-storage:&tag_cluster-{{ cluster_prefix }}"
+#
+# Configure Gluster storage nodes
+#
+- name: Configure Gluster storage nodes
+  hosts: "tag_type-storage:&tag_cluster-{{ cluster_prefix }}"
   become: true
   vars_files:
-    - vars/defaults.yml
     - "vars/{{ varfile }}"
   roles:
     - { role: gluster, type: 'storage' }
 
-- hosts: "tag_type-storage-client:&tag_cluster-{{ cluster_prefix }}"
+#
+# Configure Gluster client nodes
+#
+- name: Configure Gluster client nodes
+  hosts: "tag_type-storage-client:&tag_cluster-{{ cluster_prefix }}"
   become: true
   vars_files:
-    - vars/defaults.yml
     - "vars/{{ varfile }}"
   roles:
     - { role: gluster, type: 'storage-client' }
