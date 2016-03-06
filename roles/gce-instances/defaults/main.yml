@@ -22,5 +22,5 @@ gce_client_server_machine_type: n1-standard-1
 # Location and OS image settings for all
 
 # Find available instances with the command: gcloud compute images list
-gce_image: centos-7-v20160126
+gce_image: centos-7-v20160301
 gce_zone: us-central1-b
