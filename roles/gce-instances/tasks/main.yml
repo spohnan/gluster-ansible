@@ -1,6 +1,6 @@
 - name: New server instance(s)
-  debug: msg="Creating new instance(s) - {{ new_server_names.strip() }}"
   when: "{{ new_server_names.strip() | length > 0 }}"
+  debug: msg="Creating new instance(s) - {{ new_server_names.strip() }}"
 
 - name: Launch instance(s)
   when: "{{ new_server_names.strip() | length > 0 }}"

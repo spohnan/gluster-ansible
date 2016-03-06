@@ -1,4 +1,5 @@
 - name: Create disk(s)
+  when: "{{ new_server_names.strip() | length > 0 }}"
   gce_pd:
     name: "{{ item[0] }}-{{ item[1] }}"
     instance_name: "{{ item[0] }}"
@@ -10,5 +11,5 @@
     pem_file: "{{ gce_pem_file }}"
     project_id: "{{ gce_project_id }}"
   with_nested:
-      - "{{ server_names.strip().split(',') }}"
+      - "{{ server_names }}"
       - "{{ disk_names.strip().split(',') }}"
