@@ -5,13 +5,17 @@
   any_errors_fatal: true
   hosts: localhost
   connection: local
-  gather_facts: no
   vars_files:
     - "vars/{{ varfile }}"
   vars:
     - type: "storage"
-    - server_count: "{{ storage_servers_count }}"
     - gce_machine_type: "{{ gce_storage_server_machine_type }}"
+    - existing_server_names: "{{ groups['tag_type-' + type] | default([]) | intersect( groups['tag_cluster-' + cluster_prefix] | default([]) ) }}"
+    - new_server_names: |
+        {% for s in range(0, storage_servers_count - existing_server_names | length ) -%}
+          {{ cluster_prefix }}-{{ type }}-{{ ( s ~ type ~ ansible_date_time.iso8601_micro ) | hash('sha1')|string | truncate(6, false, '')}}{% if not loop.last %},{% endif %}
+        {%- endfor %}
+    - server_names: "{{ existing_server_names | union(new_server_names.strip().split(',')) }}"
   roles:
     - python-modules
     - { role: gce-instances, gce_tags: [ "type-{{ type }}", "cluster-{{ cluster_prefix }}" ] }
@@ -24,12 +28,16 @@
   any_errors_fatal: true
   hosts: localhost
   connection: local
-  gather_facts: no
   vars_files:
     - "vars/{{ varfile }}"
   vars:
     - type: "storage-client"
-    - server_count: "{{ client_servers_count }}"
     - gce_machine_type: "{{ gce_client_server_machine_type }}"
+    - existing_server_names: "{{ groups['tag_type-' + type] | default([]) | intersect( groups['tag_cluster-' + cluster_prefix] | default([]) ) }}"
+    - new_server_names: |
+        {% for s in range(0, client_servers_count - existing_server_names | length ) -%}
+          {{ cluster_prefix }}-{{ type }}-{{ ( s ~ type ~ ansible_date_time.iso8601_micro ) | hash('sha1')|string | truncate(6, false, '')}}{% if not loop.last %},{% endif %}
+        {%- endfor %}
+    - server_names: "{{ existing_server_names | union(new_server_names.strip().split(',')) }}"
   roles:
     - { role: gce-instances, gce_tags: [ "type-{{ type }}", "cluster-{{ cluster_prefix }}" ] }

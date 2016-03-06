@@ -24,11 +24,3 @@ gce_client_server_machine_type: n1-standard-1
 # Find available instances with the command: gcloud compute images list
 gce_image: centos-7-v20160126
 gce_zone: us-central1-b
-
-# To support idempotent playbook calls with GCE where server names are immutable the default server names
-# are generated from cluster prefix, server type label and cluster count index which is hashed to give a unique-ish suffix
-server_names: |
-                {% set comma = joiner(",") %}
-                {% for s in range(0, server_count) -%}
-                  {{comma()}}{{ cluster_prefix }}-{{ type }}-{{ [s|string, type, cluster_prefix] | join('') | hash('sha1')|string | truncate(6, false, '')}}
-                {%- endfor %}

@@ -1,6 +1,11 @@
+- name: New server instance(s)
+  debug: msg="Creating new instance(s) - {{ new_server_names.strip() }}"
+  when: "{{ new_server_names.strip() | length > 0 }}"
+
 - name: Launch instance(s)
+  when: "{{ new_server_names.strip() | length > 0 }}"
   gce:
-    instance_names: "{{ server_names.strip().split(',') }}"
+    instance_names: "{{ server_names | join(',') | regex_replace(',$', '') }}"
     machine_type: "{{ gce_machine_type }}"
     image: "{{ gce_image }}"
     service_account_email: "{{ gce_service_account_email }}"
@@ -10,6 +15,7 @@
     zone: "{{ gce_zone }}"
   register: gce
 
-- name: Wait for SSH to come up
+- name: Wait for SSH to come up on new instance(s)
+  when: "{{ new_server_names.strip() | length > 0 }}"
   wait_for: host={{ item.public_ip }} port=22 delay=10 timeout=300
-  with_items: "{{ gce.instance_data }}"
+  with_items: "{{ gce.instance_data | default([]) }}"
