@@ -71,13 +71,13 @@ gce_project_id: my-project-id
 == gluster.sh script
 
 This script collects the arguments needed to perform any action against a provider and coordinates the execution of the
-Ansible playbooks. Both multi-step actions that will configure everything in a single commmand and the ability to run or
+Ansible playbooks. Both multi-step actions that will configure everything in a single command and the ability to run or
 re-run individual playbooks are allowed.
 
 The --vars argument is used to specify a local configuration override file you create in the vars/ directory with the
 settings you wish to override for your cluster configuration.
 
-=== Usage Examples
+=== Build and Configuration Examples
 
 [source, bash]
 ----
@@ -92,6 +92,44 @@ settings you wish to override for your cluster configuration.
 
 # You can add the --verbose to get extra output from Ansible to assist debugging issues
 ./gluster.sh --prefix dev --provider gce --vars mydomain.yml --action configure --verbose
+----
+
+== Gluster Volume Configuration
+
+The https://gluster.readthedocs.org/en/latest/Administrator%20Guide/Setting%20Up%20Volumes/[documentation^] on the
+various configuration is very detailed. Some common options are shown below.
+
+[source, bash]
+----
+# Add peers
+gluster peer probe <host name>
+
+# Peer status
+gluster peer status
+
+# A three brick dispersed volume
+gluster volume create gv0 \
+    disperse 3 redundancy 1 \
+    t7-storage-95f4c9:/bricks/xvdf/gv0 \
+    t7-storage-a89e9f:/bricks/xvdf/gv0 \
+    t7-storage-2e99cb:/bricks/xvdf/gv0
+
+# Start and status the volume
+gluster volume start gv0
+gluster volume info gv0
+
+Volume Name: gv0
+Type: Disperse
+Volume ID: 71970221-fc75-48d9-8205-bb3f389500d2
+Status: Started
+Number of Bricks: 1 x (2 + 1) = 3
+Transport-type: tcp
+Bricks:
+Brick1: t7-storage-95f4c9:/bricks/xvdf/gv0
+Brick2: t7-storage-a89e9f:/bricks/xvdf/gv0
+Brick3: t7-storage-2e99cb:/bricks/xvdf/gv0
+Options Reconfigured:
+performance.readdir-ahead: on
 ----
 
 == Version
