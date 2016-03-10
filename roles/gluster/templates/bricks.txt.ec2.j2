@@ -1,0 +1,34 @@
+Public IPs
+----------------------------------------
+{% for host in play_hosts %}
+# {{ hostvars[host].inventory_hostname }}
+gluster peer probe {{ hostvars[host].ansible_nodename }}
+{% endfor %}
+
+Storage Hosts
+----------------------------------------
+{% for host in play_hosts %}
+{% for vol in hostvars[host].ansible_mounts[1:] %}
+{{ hostvars[host].ansible_nodename }}:{{ vol.mount }}
+{% endfor %}
+{% endfor %}
+
+
+Example
+----------------------------------------
+# Add peers
+gluster peer probe <host name>
+
+# Peer status
+gluster peer status
+
+# A three brick dispersed volume
+gluster volume create gv0 disperse 3 redundancy 1 \
+    t7-storage-95f4c9:/bricks/xvdf/gv0 \
+    t7-storage-a89e9f:/bricks/xvdf/gv0 \
+    t7-storage-2e99cb:/bricks/xvdf/gv0
+
+# Start and status the volume
+gluster volume start gv0
+gluster volume info gv0
+

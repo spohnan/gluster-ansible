@@ -11,14 +11,17 @@
     - name: Run hostnamectl command
       hostname:
         name: "{{ ec2_tag_Cluster }}-{{ ec2_tag_Type }}-{{ ec2_id | hash('sha1') | truncate(6, false, '') }}.{{ domain }}"
+      tags: sysconfig
 
     - name: Ensure hostname is preserved in cloud-init
       lineinfile: "dest=/etc/cloud/cloud.cfg regexp='^preserve_hostname' line='preserve_hostname: true' state=present"
+      tags: sysconfig
 
     - name: Update /etc/hosts file
       lineinfile: dest=/etc/hosts regexp='.*{{ hostvars[item].ansible_hostname }}$' line='{{ hostvars[item].ansible_default_ipv4.address }} {{ hostvars[item].ansible_fqdn }} {{ hostvars[item].ansible_hostname }}' state=present
       when: hostvars[item].ansible_default_ipv4.address is defined
       with_items: "{{ play_hosts }}"
+      tags: sysconfig
 
 #
 # Configure Gluster storage nodes
@@ -29,7 +32,7 @@
     - "vars/{{ varfile }}"
   become: true
   roles:
-    - { role: gluster, type: 'storage' }
+    - { role: gluster, type: 'storage', tags: [ 'gluster', 'storage' ] }
 
 #
 # Configure Gluster client nodes
@@ -40,4 +43,4 @@
     - "vars/{{ varfile }}"
   become: true
   roles:
-    - { role: gluster, type: 'storage-client' }
+    - { role: gluster, type: 'storage-client', tags: [ 'gluster', 'client' ] }

@@ -27,6 +27,9 @@
   when: type == "storage"
   service: name=glusterd enabled=yes state=started
 
+- name: Install brick list file
+  template: src=bricks.txt.ec2.j2 dest=/root/bricks.txt mode=0644
+
 - name: Install the volume setup script
   when: type == "storage"
   copy: src=files/prepare-volumes.sh dest=/root/prepare-volumes.sh mode=0755

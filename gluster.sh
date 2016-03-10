@@ -5,12 +5,13 @@
 # 			--prefix [NODE_NAME_PREFIX]
 # 			--vars [variable file name]
 # 			--action [CONFIG_STEP]
-#			--verbose                      # optionally run ansible with -vvv
+#           --tags [ comma separated task tags ]      # optional
+#           --skip-tags [ comma separated task tags ] # optional
+#			--verbose                                 # optionally run Ansible with -vvv
 
 # Parse arguments
 declare -A ARGS
-# defaults
-ARGS[reboot]="true"
+# Defaults
 ARGS[provider]="aws"
 while [ $# -gt 0 ]; do
     # Trim the first two chars off of the arg name ex: --foo
@@ -40,10 +41,14 @@ list_inventory() {
 }
 
 run_playbook() {
+    [[ ! -z "${ARGS[tags]}" ]] && tags="--tags ${ARGS[tags]}"
+    [[ ! -z "${ARGS[skip-tags]}" ]] && skip_tags="--skip-tags ${ARGS[skip-tags]}"
 	ansible-playbook ${ARGS[verbose]//true/-vvv} \
 		-i hosts/"${ARGS[provider]}" \
 		-e $CLUSTER -e "cluster_prefix=${ARGS[prefix]}" \
-		"${ARGS[provider]}-${1}.yml" --extra-vars="varfile=${ARGS[vars]}"
+		"${ARGS[provider]}-${1}.yml" \
+		${tags} ${skip_tags} \
+		--extra-vars="varfile=${ARGS[vars]}"
 }
 
 case "${ARGS[action]}" in
