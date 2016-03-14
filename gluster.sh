@@ -43,9 +43,11 @@ list_inventory() {
 run_playbook() {
     [[ ! -z "${ARGS[tags]}" ]] && tags="--tags ${ARGS[tags]}"
     [[ ! -z "${ARGS[skip-tags]}" ]] && skip_tags="--skip-tags ${ARGS[skip-tags]}"
+    [[ "${ARGS[action]}" == "build-all" ]] && intial_build="-e initial_install_reboot=true"
 	ansible-playbook ${ARGS[verbose]//true/-vvv} \
 		-i hosts/"${ARGS[provider]}" \
 		-e $CLUSTER -e "cluster_prefix=${ARGS[prefix]}" \
+		${intial_build} \
 		"${ARGS[provider]}-${1}.yml" \
 		${tags} ${skip_tags} \
 		--extra-vars="varfile=${ARGS[vars]}"
@@ -58,7 +60,7 @@ case "${ARGS[action]}" in
 		for step in "${STEPS[@]}"; do
 			run_playbook $step
 			list_inventory > /dev/null 2>&1 # Update cache
-		done
-  		;;
+		done ;;
+	"ping") ansible -i hosts/"${ARGS[provider]}" "tag_Cluster_${ARGS[prefix]}" -m ping ;;
   *) run_playbook "${ARGS[action]}" ;; # Anything else should be a playbook
 esac

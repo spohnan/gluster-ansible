@@ -1,0 +1,2 @@
+# Kernel update can trigger an auto reboot if allowed
+auto_reboot_allowed: false
