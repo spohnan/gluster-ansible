@@ -68,6 +68,21 @@ gce_pem_file: ~/.ssh/my-account-key.pem
 gce_project_id: my-project-id
 ----
 
+== Ansible
+
+Being a bit of a Python novice I ran into a number of PATH related issues with Anisible installed from either RPM on my
+Linux machines or Homebrew on my Mac. I got the best results installing the Python Pip installer using the appropriate
+method for either system and then using `pip install --upgrade ansible` to get and keep Ansible up to date.
+
+[NOTE]
+.Ansible version 2.1 required
+====
+Ansible 2.1 which is currently in development has an EC2 feature to set the delete_on_termination flag when creating
+storage disks. This prevents you from having unattached volumes that you have to delete with a separate action after
+terminating cluster instances. For the moment this requires that you https://docs.ansible.com/ansible/intro_installation.html#running-from-source[run from source^]
+but at some point in the near future >v2.1 will be generally available.
+====
+
 == gluster.sh script
 
 This script collects the arguments needed to perform any action against a provider and coordinates the execution of the
@@ -92,12 +107,17 @@ settings you wish to override for your cluster configuration.
 
 # You can add the --verbose to get extra output from Ansible to assist debugging issues
 ./gluster.sh --prefix dev --provider gce --vars mydomain.yml --action configure --verbose
+
+# Use the default (aws) provider and list the nodes and public IPs of the storage nodes
+./gluster.sh --prefix dev --vars mydomain.yml --action info
 ----
 
 == Gluster Volume Configuration
 
 The https://gluster.readthedocs.org/en/latest/Administrator%20Guide/Setting%20Up%20Volumes/[documentation^] on the
-various configuration is very detailed. Some common options are shown below.
+various configuration is very detailed. Some common options are shown below. Once you've connected to a storage node
+there is an inventory file located at /root/bricks.txt that will assist you with the machine and volume information
+needed to run the commands shown below.
 
 [source, bash]
 ----
