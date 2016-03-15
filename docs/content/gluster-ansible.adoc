@@ -21,7 +21,22 @@ environments.
 
 == Environment Setup
 
-Each environment requires a some account creation and project configuration to work with your credentials
+Each cloud environment requires a some account creation and project configuration to work with your credentials.
+
+=== Ansible
+
+Being a bit of a Python novice I ran into a number of PATH related issues with Anisible installed from either RPM on my
+Linux machines or Homebrew on my Mac. I got the best results installing the Python Pip installer using the appropriate
+method for either system and then using `pip install --upgrade ansible` to get and keep Ansible up to date.
+
+[WARNING]
+.Ansible version 2.1 required
+====
+Ansible 2.1 which is currently in development has an EC2 feature to set the delete_on_termination flag when creating
+storage disks. This prevents you from having unattached volumes that you have to delete with a separate action after
+terminating cluster instances. For the moment this requires that you https://docs.ansible.com/ansible/intro_installation.html#running-from-source[run from source^]
+but at some point in the near future >v2.1 will be generally available.
+====
 
 === Amazon Web Services
 
@@ -67,21 +82,6 @@ gce_service_account_email: 13_digit_acct_number-compute@developer.gserviceaccoun
 gce_pem_file: ~/.ssh/my-account-key.pem
 gce_project_id: my-project-id
 ----
-
-== Ansible
-
-Being a bit of a Python novice I ran into a number of PATH related issues with Anisible installed from either RPM on my
-Linux machines or Homebrew on my Mac. I got the best results installing the Python Pip installer using the appropriate
-method for either system and then using `pip install --upgrade ansible` to get and keep Ansible up to date.
-
-[NOTE]
-.Ansible version 2.1 required
-====
-Ansible 2.1 which is currently in development has an EC2 feature to set the delete_on_termination flag when creating
-storage disks. This prevents you from having unattached volumes that you have to delete with a separate action after
-terminating cluster instances. For the moment this requires that you https://docs.ansible.com/ansible/intro_installation.html#running-from-source[run from source^]
-but at some point in the near future >v2.1 will be generally available.
-====
 
 == gluster.sh script
 
