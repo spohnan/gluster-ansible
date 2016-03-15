@@ -1,0 +1,13 @@
+#
+# List Gluster cluster nodes information
+#
+- name: Cluster information
+  hosts: "tag_Type_storage:tag_Type_storage_client:&tag_Cluster_{{ cluster_prefix }}"
+  tasks:
+
+  - name: Storage node(s)
+    debug: msg="{{ ec2_tag_Name }} - {{ inventory_hostname }}"
+
+  - name: Install brick list file
+    become: true
+    template: src=files/bricks.txt.ec2.j2 dest=/root/bricks.txt mode=0644

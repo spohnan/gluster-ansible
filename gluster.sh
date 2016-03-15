@@ -56,7 +56,7 @@ run_playbook() {
 case "${ARGS[action]}" in
 	"list-inventory") list_inventory ;;
 	"build-all")
-		STEPS=( "provision" "configure" "update" )
+		STEPS=( "provision" "configure" "info" "update" )
 		for step in "${STEPS[@]}"; do
 			run_playbook $step
 			list_inventory > /dev/null 2>&1 # Update cache
