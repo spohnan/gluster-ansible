@@ -10,4 +10,4 @@
 
   - name: Install brick list file
     become: true
-    template: src=files/bricks.txt.ec2.j2 dest=/root/bricks.txt mode=0644
+    template: src=files/bricks.txt.j2 dest=/root/bricks.txt mode=0644

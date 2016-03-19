@@ -6,8 +6,8 @@
   tasks:
 
     - name: Storage node(s)
-      debug: msg="{{ name }} - {{ inventory_hostname }}"
+      debug: msg="{{ inventory_hostname }} - {{ hostvars[inventory_hostname].gce_public_ip }}"
 
     - name: Install brick list file
       become: true
-      template: src=files/bricks.txt.ec2.j2 dest=/root/bricks.txt mode=0644
+      template: src=files/bricks.txt.j2 dest=/root/bricks.txt mode=0644
