@@ -108,6 +108,9 @@ settings you wish to override for your cluster configuration.
 # You can add the --verbose to get extra output from Ansible to assist debugging issues
 ./gluster.sh --prefix dev --provider gce --vars mydomain.yml --action configure --verbose
 
+# Ping all the nodes to check to see if they are reachable
+./gluster.sh --prefix dev --provider gce --vars mydomain.yml --action ping
+
 # Use the default (aws) provider and list the nodes and public IPs of the storage nodes
 ./gluster.sh --prefix dev --vars mydomain.yml --action info
 ----
