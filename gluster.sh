@@ -61,6 +61,11 @@ case "${ARGS[action]}" in
 			run_playbook $step
 			list_inventory > /dev/null 2>&1 # Update cache
 		done ;;
-	"ping") ansible -i hosts/"${ARGS[provider]}" "tag_Cluster_${ARGS[prefix]}" -m ping ;;
+	"ping") # GCE has different naming rules for tags than AWS
+		case "${ARGS[provider]}" in
+			"aws") ansible -i hosts/"${ARGS[provider]}" "tag_Cluster_${ARGS[prefix]}" -m ping ;;
+			"gce") ansible -i hosts/"${ARGS[provider]}" "tag_cluster-${ARGS[prefix]}" -m ping ;;
+		esac
+		;;
   *) run_playbook "${ARGS[action]}" ;; # Anything else should be a playbook
 esac
