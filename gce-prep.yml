@@ -1,0 +1,12 @@
+#
+# Prepare systems for configuration
+#
+- name: Prepare systems for configuration
+  hosts: "tag_type-storage:&tag_cluster-{{ cluster_prefix }}"
+  become: yes
+  vars_files:
+    - "vars/{{ varfile }}"
+  tasks:
+
+  - name: Remove require tty
+    lineinfile: regexp="^\s+\w+\s+requiretty" dest=/etc/sudoers state=absent
