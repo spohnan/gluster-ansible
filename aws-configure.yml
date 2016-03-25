@@ -17,11 +17,11 @@
       lineinfile: "dest=/etc/cloud/cloud.cfg regexp='^preserve_hostname' line='preserve_hostname: true' state=present"
       tags: sysconfig
 
-    - name: Update /etc/hosts file
-      lineinfile: dest=/etc/hosts regexp='.*{{ hostvars[item].ansible_hostname }}$' line='{{ hostvars[item].ansible_default_ipv4.address }} {{ hostvars[item].ansible_fqdn }} {{ hostvars[item].ansible_hostname }}' state=present
-      when: hostvars[item].ansible_default_ipv4.address is defined
-      with_items: "{{ play_hosts }}"
-      tags: sysconfig
+    - name: Hosts file
+      template: src=files/hosts.j2 dest=/etc/hosts mode=0644
+      tags:
+        - use_hosts_file
+        - sysconfig
 
 #
 # Configure Gluster storage nodes
