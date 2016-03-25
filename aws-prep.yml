@@ -9,4 +9,4 @@
   tasks:
 
   - name: Remove require tty
-    lineinfile: regexp="^\s+\w+\s+requiretty" dest=/etc/sudoers state=absent
+    lineinfile: regexp="Defaults\s+requiretty" dest=/etc/sudoers state=absent
