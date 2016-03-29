@@ -10,3 +10,12 @@
 
   - name: Remove require tty
     lineinfile: regexp="^\s+\w+\s+requiretty" dest=/etc/sudoers state=absent
+
+  - name: Do not use DNS resolution for SSH
+    lineinfile: regexp="Use\s+DNS" dest=/etc/ssh/sshd_config state=absent
+
+  - name: Do not use DNS resolution for SSH
+    lineinfile: regexp="^Use\s+DNS" dest=/etc/ssh/sshd_config  line="UseDNS no" state=present
+
+  - name: Restart SSH
+    service: name=sshd state=restarted
