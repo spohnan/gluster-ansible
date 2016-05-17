@@ -33,11 +33,21 @@
       Name: "{{ ec2_tag_Cluster }}-{{ ec2_tag_Type }}-{{ item.id | hash('sha1') | truncate(6, false, '') }}"
   with_items: "{{ ec2.instances }}"
 
+# Ping public IPs
+#- name: Wait for SSH
+#  wait_for:
+#    host: "{{ item.public_ip }}"
+#    port: 22
+#    delay: 10
+#    timeout: 320
+#    state: started
+#  with_items: "{{ ec2.instances}}"
+
+# Ping using ssh through a gateway
 - name: Wait for SSH
-  wait_for:
-    host: "{{ item.public_ip }}"
-    port: 22
-    delay: 10
-    timeout: 320
-    state: started
-  with_items: "{{ ec2.instances}}"
+  local_action: shell ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "{{ item.private_ip }}" echo hello
+  register: retval
+  retries: 5
+  delay: 20
+  until: retval.stdout.find('hello') != -1
+  with_items: "{{ ec2.instances | default([]) }}"
